@@ -1,0 +1,70 @@
+int pinData = 2;
+
+int pinLatch = 3;
+
+int pinClock = 4;
+
+#define TIEMPO 200
+  
+ 
+ 
+int
+main () 
+{
+  
+init ();
+  
+    //void setup:
+    Serial.begin (9600);
+  
+pinMode (pinData, OUTPUT);
+  
+pinMode (pinLatch, OUTPUT);
+  
+pinMode (pinClock, OUTPUT);
+  
+pinMode (12, INPUT);
+  
+for(int i=0;i<25;i++){ 
+ledWrite (i, 10);
+Serial.print ("Los numeros son iguales?");  
+if (digitalRead (12) == HIGH)
+    {
+Serial.println ("Son iguales");
+    
+}
+  
+  else
+    
+    {
+      
+Serial.println ("Son Diferentes");
+    
+}
+}
+  
+    //void loop()
+    while (true)
+    
+    {
+    
+delay (TIEMPO); 
+}
+
+return 0; 
+}
+
+
+void
+ledWrite (int RLed, int GLed)
+{
+  
+shiftOut (pinData, pinClock, LSBFIRST, GLed);
+  
+shiftOut (pinData, pinClock, LSBFIRST, RLed);
+  
+digitalWrite (pinLatch, HIGH);
+  
+digitalWrite (pinLatch, LOW);
+
+} 
