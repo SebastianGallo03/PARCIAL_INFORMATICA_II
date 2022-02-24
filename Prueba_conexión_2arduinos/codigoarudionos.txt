@@ -1,0 +1,68 @@
+//***** Arduino 1 *****//
+
+#include <SoftwareSerial.h>
+
+char message[] = "Arduino_1";  // Mensagem enviado p Arduino_2
+
+const int myserial_RX = 2;
+const int myserial_TX = 3;
+
+SoftwareSerial mySerial(myserial_RX, myserial_TX);
+
+void setup()
+{
+  mySerial.begin(4800);
+  delay(500);
+}
+
+void loop()
+{
+  mySerial.listen();
+  
+  for(int i = 0; i < strlen(message); i++) {
+    //Enviar Mensagem para Arduino_2
+    mySerial.write(message[i]); 
+  }
+  mySerial.write('\0');
+  
+  delay(2000);
+}
+
+
+//***** Arduino 2 *****//
+
+#include <SoftwareSerial.h>
+
+char buffer[128];
+int counter = 0;
+
+const int myserial_RX = 3;
+const int myserial_TX = 2;
+
+SoftwareSerial mySerial(myserial_RX, myserial_TX);
+
+void setup()
+{
+  Serial.begin(9600);
+  Serial.println("Start reading.");
+  
+  mySerial.begin(4800);
+  delay(500);
+}
+
+void loop()
+{
+  while(mySerial.available()) {
+    char message = mySerial.read();
+   
+    buffer[counter] = message;
+    counter++;
+    
+    if(message == '\0') {
+      Serial.println(buffer);
+      counter = 0;
+    }
+    
+    delay(10);
+  }
+}
