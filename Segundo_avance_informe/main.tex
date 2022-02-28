@@ -1,0 +1,193 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+
+
+
+\begin{document}
+
+\begin{titlepage}
+    \begin{center}
+        \vspace*{1cm}
+        
+        \Huge
+        \textbf{Informe Parcial 1}
+            
+        \vspace{0.5cm}
+        \LARGE
+       \textit{ Informática II}
+            
+        \vspace{1.5cm}
+            
+        \textbf{Juan Sebastian Garavito Gallo\\
+        Anderson Giraldo Arboleda\\
+        Jesus David Mercado Machado}
+            
+        \vfill
+            
+        \vspace{0.8cm}
+            
+        \Large
+        Despartamento de Ingeniería Electrónica y Telecomunicaciones\\
+        Universidad de Antioquia\\
+        Medellín\\
+        2022
+            
+    \end{center}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{RESUMEN}
+\label{resumen}
+
+
+
+
+\newpage
+\section{INTRODUCCIÓN}
+
+\newpage
+\section{TAREAS}
+\label{tareas}
+Definimos las tareas para el desarrollo de la solucion del problema de la siguiente manera.
+
+\begin{itemize}
+
+    \item La primera tarea que tuvimos que resolver fue entender el problema y hacerle su debido análisis.
+    
+    \item Despues del análisis, empezamos a investigar sobre el dispositio y amontar los jemplos en tinkercad que nos ayudaran a comprender el funcionamiento del mismo.
+    
+    \item Luego de tener la bandera empezaremos con el desarrollo del algoritmo.
+    
+    \item comunicar los dos arduinos para enviar los datos y el aviso de que va la bandera.
+    
+    \item Conectar la pantalla LCD al arduino receptor.
+
+    \item Desarrollar el código que comprueba cual es el dato real, verificando según las reglas de desencriptación. 
+   
+   \item almacenar los datos reales e imprimirlos en la pantalla LCD.
+
+    
+\end{itemize}
+
+
+\newpage
+\section{ANÁLISIS DEL PROBLEMA}
+\label{Análisis}
+
+El sistema básicamente se dividirá en tres partes, el Arduino emisor que mediante su puerto serial recibirá la cadena de números enteros y enviara los datos al Arduino receptor, mientras que paralelamente con la ayuda de un circuito adjunto se comprobara byte a byte si el número ingresado es la bandera entregada o no. Por último el Arduino receptor, recibe tanto los datos enviados que ira guardando en un arreglo dinámico como la comprobación de la bandera, que indicara el comienzo del proceso de descripción en el Arduino receptor, de proceso saldrá el mensaje verdadero que posteriormente se mostrara mediante el puerto serial en el pc2.\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+En el siguiente diagrama tratamos de explicar como planteamos el problema.\\
+\\
+\includegraphics{Captura6.JPG}\\
+
+
+\newpage
+\section{MARCO TEÓRICO}
+\label{marco}
+[20] Investigar y explicar con sus propias palabras cómo utilizar el circuito integrado 74HC595. En esta parte mostrar un ejemplo de uso del circuito integrado primero de forma independiente con pulsadores o switches y luego usando Arduino,y detallar en el informe la utilidad que puede darle a este elemento para la solución del problema.\\
+
+-Es un registro de desplazamiento que cuenta con una entrada en serie y salida en paralelo de 8 bits. Este dispositivo solo funciona con dos valores de tensión 1 y 0, 1 sería el valor +Vcc y 0 un valor muy cercano a 0v.\\
+
+-Se puede tomar como un conversor de serie-paralelo. Como es de suponer la entrada se dará un valor uno detrás de otro, mientras que su salida mostrará todos los entregará a la vez.\\
+
+-Otro factor importante de este componente es que cada vez que se le entreguen datos nuevos el no los va a sobrescribir lo que hará es desplazarlos n posiciones a la derecha, siendo n el número de datos nuevos.\\
+
+-Una de las utilidades que nos puede entregar este elemento para la solución del problema es el clock de latch lo que quiere decir que hasta que no llegue un flanco de subida por el clock de latch los shift registrer no pasan a la salida permitiendo esto organizar los datos con completa libertad sin ir a afectar el circuito.\\
+
+-Para el caso es muy útil ya que si no existiera el latch veríamos todo el proceso de encriptación mientras se organiza, viendo así datos o valores que no son lo que realmente queremos, mientras que con esto podemos ordenar los datos y cuando realmente deseemos mostrarlo.\\
+
+-Otra gran ventaja que es muy útil de este componente es reducir el número de pines que se necesitaría para llevar a cabo una tarea, lo reduce a 3 pines. Si por ejemplo tenemos varios componentes iguales y conectamos la salida del shift a con la señal de siguiente “conectarlos en cascada” podemos incrementar el número de elementos a controlar sin que suba el nuero de pines.\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\item 1. Ejemplo para el componente con pulsadores y sin Arduino\\
+
+\includegraphics{Captura1.JPG}\\
+Este es el montaje para ensayar el dispositivo mediante pulsadores y sin uso de arduino.\\
+
+-Le ingresaremos al sistema el siguiente patron para comprobar que si se desplaza a la derecha.\\
+PATRON 1011 y tenemos el siguiente resultado.\\
+\includegraphics{Captura2.JPG}\\
+\\
+y por ultimo ingresaremos el 0011 para obtener este resultado final.\\
+\includegraphics{Captura3.JPG}\\
+\\
+Observando la figura final se puede notar que cada vez que ingresábamos un valor se iba desplazando hacia la derecha, notando así el funcionamiento del componente con ayuda de los pulsadores le indicábamos cual valor mostrar en la salida y cual no.\\
+\\
+\item 2. Ejemplo usando arduino\\
+Montaje\\
+\includegraphics{Captura4.JPG}\\
+Una vez encendido el arduino se ira encendiendo led por led.\\
+\\
+\includegraphics{Captura5.JPG}\\
+Esto lo hará una y otra vez y como se puede observar en el Arduino se utilizan 3 pines y los componentes están conectados en cascada permitiendo así controlar más cosas al tiempo.\\
+
+
+
+\newpage
+\section{EVOLUCIÓN DEL TRABAJO}
+\label{evolucion}
+\begin{itemize}
+\item El primer inconveniente que se presentó a la hora de resolver el problema fue la comunicación entre los dos arduinos, ya que investigando y buscando como hacer la conexión solo se encontraba información para comunicarlos por puerto serial (RX, TX).Por lo que recurrimos a una asesoría con el monitor del curso el cual nos explicó y en conjunto los comunicamos, luego con ayuda del taller se entendió mejor como era la conexión.
+
+\item Con ayuda de los dispositivos 74HC595 integrados a un circuito, comparamos si el dato ingresado corresponde a la clave, de ser así envía una señal HIGH al otro Arduino comunicándose así de manera sincrónica.
+
+\item La señal en alto ira por un cable conectado directamente al puerto digital (7) del otro Arduino.
+
+\item Otro de los problemas que surgió , es que se reciben los datos separados por (,) para esto se recurrió a la documentación y se encontró la función (int dato= Serial.parseInt(SKIP ALL)), que lo que hace es entregar el entero asociado y omitir lo demás.
+
+\item A la hora de simular el código en tinkercad, se presentó una curiosidad. Debido a que se tenía que enfocar la parte del circuito encargada de enviar la señal en HIGH cuando aparece el dato bandera, de lo contrario no le avisaba a el otro Arduino que iba el dato bandera; Se perdió tiempo  tratando de solucionar el problema ya que se creía que era un error de conexión o código, pero sin modificar el código ni las conexiones y solo enfocando esa parte funciono correctamente.
+
+\item Una vez recibidos los datos incluyendo el dato bandera (clave) procedemos a desarrollar el código que verificara si se cumplen las reglas de desencriptación.
+
+
+
+\end{itemize}
+\end{document}
