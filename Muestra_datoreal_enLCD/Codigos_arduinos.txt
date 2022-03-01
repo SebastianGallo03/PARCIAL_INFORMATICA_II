@@ -1,0 +1,117 @@
+ARDUINO #1
+#include <SoftwareSerial.h>
+const int myserial_RX = 8;
+const int myserial_TX = 9;
+const int clave=32;
+SoftwareSerial mySerial(myserial_RX, myserial_TX);
+
+int pinData = 2;
+int pinLatch = 3;
+int pinClock = 4;
+  
+void ledWrite (int RLed, int GLed); 
+void setup()
+{
+mySerial.begin(4800);
+Serial.setTimeout(0);
+Serial.begin (9600);
+delay(500);
+
+}
+void loop()
+{
+  
+  mySerial.listen();
+  while(Serial.available()==0)
+  {
+  }
+  int y=Serial.available();
+  while(Serial.available()>0)
+  {
+    int dato= Serial.parseInt(SKIP_ALL);
+    ledWrite(dato,clave);
+    mySerial.write(dato); 
+  }
+  mySerial.write('\0');
+} 
+void ledWrite (int RLed, int GLed)
+{
+shiftOut (pinData, pinClock, LSBFIRST, GLed); 
+shiftOut (pinData, pinClock, LSBFIRST, RLed);
+digitalWrite (pinLatch, HIGH);
+digitalWrite (pinLatch, LOW);
+} 
+
+ARDUINO#2
+#include <LiquidCrystal.h>
+#include <SoftwareSerial.h>
+
+int mensajeR[128];
+int counter = 0;
+int cont=0;
+bool condicion1=false;
+bool condicion2=false;
+
+const int myserial_RX = 9;
+const int myserial_TX = 8;
+
+SoftwareSerial mySerial(myserial_RX, myserial_TX);
+
+
+// initialize the library with the numbers of the interface pins
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+void setup() {
+  // set up the LCD's number of columns and rows:
+  lcd.begin(16, 2);
+  // Print a message to the LCD.
+  lcd.print("DATO REAL:");
+  pinMode (12, INPUT);
+  mySerial.begin(4800);
+  Serial.begin(9600);
+}
+
+void loop() {
+
+while(mySerial.available()>0) {
+int mensaje = mySerial.read();
+Serial.print(mensaje);
+bool bandera=digitalRead(7);
+Serial.println(bandera);
+if(digitalRead (7) == HIGH)
+{
+  cont++;
+}
+if(condicion2==true)
+{
+    mensajeR[counter] = mensaje;
+    Serial.print("Dato real:");
+    Serial.println(mensajeR[counter]);
+  	cont=0;
+  	condicion2=false;
+    counter++;
+}
+if(condicion1==true && mensaje%3==0)
+{
+  cont=0;
+  condicion2=true;
+  condicion1=false;
+}
+else if(condicion1==true && mensaje%3!=0)
+{
+  cont=0;
+  condicion1=false;
+}
+if(cont==2)
+{
+  condicion1=true;
+}
+    if(mensaje == '\0') {
+      //Serial.println(buffer);
+      lcd.setCursor(0, 1);
+      for(int i=0;i<counter;i++)lcd.print(mensajeR[i]);
+      counter = 0;
+    }
+  }
+}
+ 
