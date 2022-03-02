@@ -1,0 +1,44 @@
+ARDUINO#1
+#include <SoftwareSerial.h>
+const int myserial_RX = 8;
+const int myserial_TX = 9;
+const int clave=32;
+SoftwareSerial mySerial(myserial_RX, myserial_TX);
+
+int pinData = 2;
+int pinLatch = 3;
+int pinClock = 4;
+  
+void ledWrite (int RLed, int GLed); 
+void setup()
+{
+mySerial.begin(4800);
+Serial.setTimeout(0);
+Serial.begin (9600);
+delay(500);
+
+}
+void loop()
+{
+  
+  mySerial.listen();
+  while(Serial.available()==0)
+  {
+  }
+  int y=Serial.available();
+  while(Serial.available()>0)
+  {
+    int dato= Serial.parseInt(SKIP_ALL);
+    ledWrite(dato,clave);
+    mySerial.write(dato); 
+  }
+  mySerial.write('\0');
+} 
+void ledWrite (int RLed, int GLed)
+{
+shiftOut (pinData, pinClock, LSBFIRST, GLed); 
+shiftOut (pinData, pinClock, LSBFIRST, RLed);
+digitalWrite (pinLatch, HIGH);
+digitalWrite (pinLatch, LOW);
+} 
+ 
